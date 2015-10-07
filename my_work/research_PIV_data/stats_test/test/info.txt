@@ -1,0 +1,14 @@
+Order of Operations
+-Directory contains all mask files (.txt) output from DaVis (Format "B*****.txt")
+-Execute deletion_even
+	-This removes the second frame of each PIV pair (first frame corresponds to the output 
+	velocity data from DaVis)
+-Execute mask_part
+	-!!! This section is case specific !!!
+	-This is used to remove unwanted pixels from all of the mask files
+	-Currently removes a certain number of columns from left side of image
+	-Can quickly remove from both left and right side of image
+-Execute surface_search
+	-This searches each column of pixels in the final mask files for the surface
+	-Row index for each column of pixels in a frame are output as a horizontal, 1D array
+	-List of indices are concatenated into a final file
