@@ -28,7 +28,7 @@ X_mask=textread('xc_mask.txt');
 Y_mask=textread('yc_mask.txt');
 
 %%%Import Surface Index
-index_o=textread('mask_index_r3_1.txt');
+index_o=textread('mask_index_r3_B00001.txt');
 index_surf=index_o;
 index_surf(index_surf==0)=1;
 a=size(index_surf);
