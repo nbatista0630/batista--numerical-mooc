@@ -62,12 +62,11 @@ for i=1:a(2)
     end                                    %each row corresponds to each column of frame
 end
 
-u_d_cut=u_d(93:end,:);
-v_d_cut=v_d(93:end,:);
-av_u=mean(u_d_cut,1);
-av_v=mean(v_d_cut,1);
-dlmwrite('av_u_B00001.txt',av_u)
-dlmwrite('av_v_B00001.txt',av_v)
+%test=[1 2 3;2 3 4]
+%mean_test=mean(test,1)
+u_d_cut=u_d(
+av_u=mean(u_d,1);
+av_v=mean(v_d,1)
 
 %[rows,columns]=size(v_d) %1303, 313
 %for col=1:columns
