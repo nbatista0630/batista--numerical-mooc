@@ -1,14 +1,59 @@
 Order of Operations
+
 -Directory contains all mask files (.txt) output from DaVis (Format "B*****.txt")
 -Execute deletion_even
 	-This removes the second frame of each PIV pair (first frame corresponds to the output 
 	velocity data from DaVis)
--Execute mask_part
+!Ignore-Execute mask_part
 	-!!! This section is case specific !!!
 	-This is used to remove unwanted pixels from all of the mask files
 	-Currently removes a certain number of columns from left side of image
 	-Can quickly remove from both left and right side of image
+	-Ignore this step. Implemented later in matlab while choosing space to analyze
 -Execute surface_search
 	-This searches each column of pixels in the final mask files for the surface
 	-Row index for each column of pixels in a frame are output as a horizontal, 1D array
-	-List of indices are concatenated into a final file
+	-List of indices are concatenated into a final file (current form: 'mask_index_r3_B00001')
+-Execute reshape_all
+	-Reshape surface search list files into correct format for Matlab
+		-Output converts B to F in file names
+	-(BEFORE RUNNING) Use bash shell to edit all files, removing brackets:
+		'  sed -i 's/\]//' *.txt  '
+		'  sed -i 's/\[//' *.txt  '
+	-These lines replace all instances of brackets with nothing in each .txt file
+	-Be sure to isolate files before entering command in bash
+
+New Directory containing:
+	-Surface search list files (mask_index_r*_F*****)
+	-Original output PIV files (format from Davis: 'B00001')
+	-xc_mask & yc_mask included in file
+		-built in excel
+		-xc_mask is an array matching pixelxpixel dimension of mask frame
+			-each row is identical, listing relative position from left to right in mm
+		-yc_mask is an array matching pixelxpixel dimension of mask frame
+			-each column is identical, listing relative position from top to bottom in mm
+		-Use DaVis scaling and origin information to define origin, etc.
+
+-Execute interpolation_build / interpolation_final
+	-This will refine PIV data frames to resolution of mask files (to utilize instantaneous surface position more accurately)
+	-Then "flattens" surface to first row index, i.e., each output row will correspond to a specific depth relative to mask-defined surface
+	-Input factor and offset from DaVis
+	-Currently set up to go file to file (no iterative loop)
+		-Make 4 total changes for each file (names of loaded files)
+	-This will output files in format 'u_B*****.txt' / 'v_B*****.txt'
+	-This is the step to remove a specific section of data (cut out bad section of mask right before writing new files)
+		-Be consistent across all frames!
+
+-Execute average_temporal
+	-Same directory with interpolated files (all u_B*****.txt and v_B*****.txt)
+	-Output is same dimension as one interpolated frame (mask), but averaged over total list of frames
+	-Output as av_v_tot_100.txt currently <--final average frame average frame
+
+-Execute RMS
+	-Directory contains all interpolated frames (ex. u_B*****.txt) and temporal average frame (ex. av_v_tot_100.txt)
+	-Generates RMS frame (u_RMS_100.txt)
+
+-Execute plots
+	-Performs spacial averaging (many columns --> one column for single u_bar and u_RMS frames)
+	-Plots results
+	-Currently uses plotxx found online to help plot data sets together
